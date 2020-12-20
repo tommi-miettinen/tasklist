@@ -1,0 +1,43 @@
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ff501b;
+  padding: 10px;
+  margin: 10px;
+}
+
+.subtask {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ff784f;
+  padding: 10px;
+  margin: 10px;
+  margin-top: -11px;
+}
+
+#icon:hover {
+  cursor: pointer;
+}
+
+.subtask-input-container {
+  padding: 10px;
+  margin: 10px;
+  background-color: #ff501b;
+}
+
+.subtask-input {
+  width: 50%;
+  background-color: #ff784f;
+  border: 1px solid white;
+}
+
+.subtask-submit-btn {
+  margin-left: 5px;
+  height: 20px;
+  background-color: #ff784f;
+  border: 1px solid white;
+}
+
+.subtask-submit-btn:hover {
+  cursor: pointer;
+}
