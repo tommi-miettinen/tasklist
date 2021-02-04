@@ -29,7 +29,7 @@ function App() {
 
   const createTask = async (content: string, duration: number) => {
     if (newTaskContent.length > 0) {
-      await axios.post("http://localhost:8080/tasks", {
+      await axios.post("/tasks", {
         content,
         duration,
       });
