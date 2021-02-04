@@ -3,24 +3,35 @@ import TaskContainer from "./components/Task-container/Task-container";
 import axios from "axios";
 import "./App.css";
 
+export interface Task {
+  id: number;
+  content: string;
+  duration: number;
+  completed: boolean;
+}
+
+export interface Subtask extends Task {
+  task_id: number;
+}
+
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [subtasks, setSubtasks] = useState([]);
-  const [newTaskContent, setNewTaskContent] = useState("");
-  const [newTaskDuration, setNewTaskDuration] = useState(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+  const [newTaskContent, setNewTaskContent] = useState<string>("");
+  const [newTaskDuration, setNewTaskDuration] = useState<number>(0);
 
   const fetchTasks = async () => {
-    const result = await axios.get("http://localhost:8080/tasks");
-    const result2 = await axios.get("http://localhost:8080/subtasks");
+    const result = await axios.get("/tasks");
+    const result2 = await axios.get("/subtasks");
     setSubtasks(result2.data);
     setTasks(result.data);
   };
 
-  const createTask = async (content, duration) => {
+  const createTask = async (content: string, duration: number) => {
     if (newTaskContent.length > 0) {
       await axios.post("http://localhost:8080/tasks", {
         content,
-        duration: parseInt(duration),
+        duration,
       });
       fetchTasks();
       setNewTaskContent("");
@@ -56,7 +67,7 @@ function App() {
           value={newTaskDuration}
           type="number"
           className="duration-input"
-          onChange={(e) => setNewTaskDuration(e.target.value)}
+          onChange={(e) => setNewTaskDuration(+e.target.value)}
         ></input>
         <span style={{ margin: "auto", paddingRight: 10 }}>min</span>
         <button

@@ -1,8 +1,17 @@
 import React from "react";
 import TaskItem from "../Task-item/Task-item";
+import { Task, Subtask } from "../../App";
 import "./Task-container.css";
 
-const TaskContainer = ({ tasks, subtasks, fetchTasks }) => {
+const TaskContainer = ({
+  tasks,
+  subtasks,
+  fetchTasks,
+}: {
+  tasks: Task[];
+  subtasks: Subtask[];
+  fetchTasks: any;
+}) => {
   return (
     <div>
       {tasks.map((task) => (

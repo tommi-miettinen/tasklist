@@ -8,14 +8,23 @@ import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import CloseIcon from "@material-ui/icons/Close";
+import { Task, Subtask } from "../../App";
 import "./Task-item.css";
 
-const TaskItem = ({ task, subtasks, fetchTasks }) => {
-  const [timer, setTimer] = useState(task.duration);
-  const [isActive, setIsActive] = useState(false);
-  const [subtaskContent, setSubtaskContent] = useState("");
-  const [showSubtasks, setShowSubtasks] = useState(false);
-  const decrement = React.useRef(null);
+const TaskItem = ({
+  task,
+  subtasks,
+  fetchTasks,
+}: {
+  task: Task;
+  subtasks: Subtask[];
+  fetchTasks: any;
+}) => {
+  const [timer, setTimer] = useState<number>(task.duration);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [subtaskContent, setSubtaskContent] = useState<string>("");
+  const [showSubtasks, setShowSubtasks] = useState<boolean>(false);
+  const decrement: any = React.useRef(null);
 
   useEffect(() => {
     window.addEventListener("beforeunload", updateTimerBeforeUnload);
@@ -41,52 +50,52 @@ const TaskItem = ({ task, subtasks, fetchTasks }) => {
   const handlePause = () => {
     clearInterval(decrement.current);
     setIsActive(false);
-    updateTimer(task.id);
+    updateTimer();
   };
 
-  const updateTimer = async (id) => {
+  const updateTimer = async () => {
     await axios.post(`http://localhost:8080/tasks/${task.id}/${timer}`);
   };
 
-  const formatTime = (timer) => {
+  const formatTime = (timer: number) => {
     const getSeconds = `0${timer % 60}`.slice(-2);
     const minutes = `${Math.floor(timer / 60)}`;
-    const getMinutes = `0${minutes % 60}`.slice(-2);
+    const getMinutes = `0${+minutes % 60}`.slice(-2);
     const getHours = `0${Math.floor(timer / 3600)}`.slice(-2);
 
     return `${getHours}:${getMinutes}:${getSeconds}`;
   };
 
-  const createSubtask = async (id) => {
-    await axios.post(`http://localhost:8080/subtasks/${id}`, {
+  const createSubtask = async () => {
+    await axios.post(`/subtasks/${task.id}`, {
       content: subtaskContent,
     });
     setSubtaskContent("");
     fetchTasks();
   };
 
-  const completeTask = async (id) => {
+  const completeTask = async () => {
     handlePause();
-    await axios.patch(`http://localhost:8080/tasks/${id}`, {
+    await axios.patch(`/tasks/${task.id}`, {
       completed: task.completed ? false : true,
     });
     fetchTasks();
   };
 
-  const deleteTask = async (id) => {
-    await axios.delete(`http://localhost:8080/tasks/${id}`);
+  const deleteTask = async () => {
+    await axios.delete(`/tasks/${task.id}`);
     fetchTasks();
   };
 
-  const completeSubtask = async (id, completed) => {
-    await axios.patch(`http://localhost:8080/subtasks/${id}`, {
+  const completeSubtask = async (id: number, completed: boolean) => {
+    await axios.patch(`/subtasks/${id}`, {
       completed: completed ? false : true,
     });
     fetchTasks();
   };
 
-  const deleteSubtask = async (id) => {
-    await axios.delete(`http://localhost:8080/subtasks/${id}`);
+  const deleteSubtask = async (id: number) => {
+    await axios.delete(`/subtasks/${id}`);
     fetchTasks();
   };
 
@@ -109,16 +118,11 @@ const TaskItem = ({ task, subtasks, fetchTasks }) => {
 
   const TaskCompletedStateIcon = () => {
     if (task.completed)
-      return (
-        <KeyboardBackspaceIcon
-          id="icon"
-          onClick={() => completeTask(task.id)}
-        />
-      );
-    else return <DoneIcon id="icon" onClick={() => completeTask(task.id)} />;
+      return <KeyboardBackspaceIcon id="icon" onClick={() => completeTask()} />;
+    else return <DoneIcon id="icon" onClick={() => completeTask()} />;
   };
 
-  const SubtaskCompletedStateIcon = ({ subtask }) => {
+  const SubtaskCompletedStateIcon = ({ subtask }: { subtask: Subtask }) => {
     if (subtask.completed)
       return (
         <CloseIcon
@@ -152,7 +156,7 @@ const TaskItem = ({ task, subtasks, fetchTasks }) => {
           <TaskCompletedStateIcon />
           <StopwatchIcon />
           {!task.completed && <div>{formatTime(timer)}</div>}
-          <DeleteForeverIcon id="icon" onClick={() => deleteTask(task.id)} />
+          <DeleteForeverIcon id="icon" onClick={() => deleteTask()} />
         </div>
       </div>
       {showSubtasks && (
@@ -184,7 +188,7 @@ const TaskItem = ({ task, subtasks, fetchTasks }) => {
             />
             <button
               className="subtask-submit-btn"
-              onClick={() => createSubtask(task.id)}
+              onClick={() => createSubtask()}
             >
               Lisää tehtävä
             </button>
