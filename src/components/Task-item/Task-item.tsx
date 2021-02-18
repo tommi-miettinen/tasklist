@@ -33,7 +33,7 @@ const TaskItem = ({
   });
 
   const updateTimerBeforeUnload = () =>
-    navigator.sendBeacon(`http://localhost:8080/tasks/${task.id}/${timer}`);
+    navigator.sendBeacon(`/tasks/${task.id}/${timer}`);
 
   const handleStart = () => {
     setIsActive(true);
@@ -54,7 +54,7 @@ const TaskItem = ({
   };
 
   const updateTimer = async () => {
-    await axios.post(`http://localhost:8080/tasks/${task.id}/${timer}`);
+    await axios.post(`/tasks/${task.id}/${timer}`);
   };
 
   const formatTime = (timer: number) => {
@@ -67,7 +67,7 @@ const TaskItem = ({
   };
 
   const createSubtask = async () => {
-    await axios.post(`http://localhost:8080/subtasks/${task.id}`, {
+    await axios.post(`/subtasks/${task.id}`, {
       content: subtaskContent,
     });
     setSubtaskContent("");
@@ -76,26 +76,26 @@ const TaskItem = ({
 
   const completeTask = async () => {
     handlePause();
-    await axios.patch(`http://localhost:8080/tasks/${task.id}`, {
+    await axios.patch(`/tasks/${task.id}`, {
       completed: task.completed ? false : true,
     });
     fetchTasks();
   };
 
   const deleteTask = async () => {
-    await axios.delete(`http://localhost:8080/tasks/${task.id}`);
+    await axios.delete(`/tasks/${task.id}`);
     fetchTasks();
   };
 
   const completeSubtask = async (id: number, completed: boolean) => {
-    await axios.patch(`http://localhost:8080/subtasks/${id}`, {
+    await axios.patch(`/subtasks/${id}`, {
       completed: completed ? false : true,
     });
     fetchTasks();
   };
 
   const deleteSubtask = async (id: number) => {
-    await axios.delete(`http://localhost:8080/subtasks/${id}`);
+    await axios.delete(`/subtasks/${id}`);
     fetchTasks();
   };
 
