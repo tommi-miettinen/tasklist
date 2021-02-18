@@ -67,7 +67,7 @@ const TaskItem = ({
   };
 
   const createSubtask = async () => {
-    await axios.post(`/subtasks/${task.id}`, {
+    await axios.post(`http://localhost:8080/subtasks/${task.id}`, {
       content: subtaskContent,
     });
     setSubtaskContent("");
@@ -76,26 +76,26 @@ const TaskItem = ({
 
   const completeTask = async () => {
     handlePause();
-    await axios.patch(`/tasks/${task.id}`, {
+    await axios.patch(`http://localhost:8080/tasks/${task.id}`, {
       completed: task.completed ? false : true,
     });
     fetchTasks();
   };
 
   const deleteTask = async () => {
-    await axios.delete(`/tasks/${task.id}`);
+    await axios.delete(`http://localhost:8080/tasks/${task.id}`);
     fetchTasks();
   };
 
   const completeSubtask = async (id: number, completed: boolean) => {
-    await axios.patch(`/subtasks/${id}`, {
+    await axios.patch(`http://localhost:8080/subtasks/${id}`, {
       completed: completed ? false : true,
     });
     fetchTasks();
   };
 
   const deleteSubtask = async (id: number) => {
-    await axios.delete(`/subtasks/${id}`);
+    await axios.delete(`http://localhost:8080/subtasks/${id}`);
     fetchTasks();
   };
 
